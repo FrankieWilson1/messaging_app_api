@@ -17,9 +17,10 @@ load_dotenv(env_path)
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'insecure-default-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+DEBUG = 'False'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['frankiewilson.pythonanywhere.com', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['frankiewilson.pythonanywhere.com', '127.0.0.1']
 
 # Application definition
 
@@ -75,7 +76,7 @@ WSGI_APPLICATION = 'messaging_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_DATABASE', 'dummy_db'),
+        'NAME': os.environ.get('MYSQL_DB', 'dummy_db'),
         'USER': os.environ.get('MYSQL_USER', 'dummy_user'),
         'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'dummy_password'),
         'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
@@ -117,7 +118,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/staticfiles/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -145,20 +146,6 @@ SIMPLE_JWT = {
     "USER_ID_FIELD": "pk",
 }
 
-# Production security settings. Only active if DEBUG is False
-if not DEBUG:
-    # Forces all connections to HTTPS
-    SECURE_SSL_REDIRECT = True
-
-    # Enables HTTP Strict Transport Security
-    SECURE_HSTS_SECONDS = 31536000 # 1 year
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-
-    # Ensures cookies are only sent over HTTPS
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
@@ -167,3 +154,4 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+

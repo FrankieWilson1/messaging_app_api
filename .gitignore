@@ -1,0 +1,6 @@
+chats/__pycache__/
+chats/migrations/__pycache__/
+.env
+database.txt
+messaging_app/__pycache__/
+venv/

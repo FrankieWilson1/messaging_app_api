@@ -64,15 +64,15 @@ The API will be available at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
 
 ## 📄 API Documentation
 Full, browsable API documentation is available at the root URL of your running application. This includes detailed information on every endpoint, request bodies, response formats, and status codes.
-- **Full Documentation URL**: [Documentation](https://frankiewilson.pythonanywhere.com/api/v1/)
+- **Full Documentation URL**: [Documentation](https://frankiewilson.pythonanywhere.com/)
 
 ## 🤝 Contribution
 Contributions are welcome! If you find a bug or want to add a feature, please create a Pull Request with a clear description of the changes.
 
 ## Endpoints Summary
-This is a quick reference for the main API endpoints. For full details, please refer to the **[Documentation](https://frankiewilson.pythonanywhere.com/api/v1/)**.
+This is a quick reference for the main API endpoints. For full details, please refer to the **[Documentation](https://frankiewilson.pythonanywhere.com/docs/)**.
 
-### Base URL: https://frankiewilson.pythonanywhere.com/api/v1/
+### Base URL: https://frankiewilson.pythonanywhere.com/docs/
 
 ### Authentication Endpoints
 | Method | Endpoint          |

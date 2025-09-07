@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserRegisterSerializer(serializers.ModelSerializer):
     """A user serializer modeling a user and it's field"""
     password = serializers.CharField(write_only=True)
-    
+
     class Meta:
         model = User
         fields = (
@@ -31,6 +31,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'password',
+            'user_id',
         )
         extra_kwargs = {'password': {'write_only': True}}
 
@@ -43,6 +44,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         return user
+
 
 class MessageSerializer(serializers.ModelSerializer):
     """

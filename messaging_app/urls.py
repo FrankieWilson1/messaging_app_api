@@ -1,3 +1,4 @@
+# messaging_app/urls.py
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import (
@@ -5,17 +6,16 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from chats.views import UserRegistrationView
-from .loging_views import LoginView
+from chats.views import UserRegistrationView, UserDocsView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('docs/', UserDocsView.as_view(), name='api-docs'),
     path(
         'api/v1/register/',
         UserRegistrationView.as_view(),
         name='register'
     ),
-    path('login/', LoginView.as_view(), name='login'),
     path('api/v1/', include('chats.urls')),
     path(
         'api/v1/token/',

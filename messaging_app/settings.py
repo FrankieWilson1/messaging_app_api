@@ -17,7 +17,7 @@ load_dotenv(env_path)
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'insecure-default-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'False'
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['frankiewilson.pythonanywhere.com', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['frankiewilson.pythonanywhere.com', '127.0.0.1']

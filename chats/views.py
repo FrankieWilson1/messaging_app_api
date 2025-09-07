@@ -1,6 +1,7 @@
 from rest_framework import viewsets, generics
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
+from django.views.generic import TemplateView
 
 from .permissions import IsParticipantOfConversation
 from .models import User, Message, Conversation
@@ -80,3 +81,31 @@ class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegisterSerializer
     permission_classes = ()  # Override default `isAuthenticated` permission
     #                           and allows any user to access this endpoint
+
+
+class UserProfileView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    A view for retrieving the profile of the currently authenticated user.
+    """
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        """
+        Returns the authenticated user as the object for this view
+        """
+        return self.request.user
+
+
+class UserDocsView(TemplateView):
+    """
+    A view to render the API documentation template.
+    """
+    template_name = "api_doc.html"
+
+
+class LoginView(TemplateView):
+    """
+    A view to render the login template.
+    """
+    template_name = 'login.html'

@@ -1,6 +1,14 @@
+# messaging_app/chats/urls.py
+from django.urls import path
 from rest_framework_nested import routers
 
-from .views import UserViewSet, ConversationViewSet, MessageViewSet
+from .views import (
+    UserViewSet,
+    ConversationViewSet,
+    MessageViewSet,
+    UserProfileView,
+    LoginView,
+)
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -17,5 +25,9 @@ conversations_router.register(
     basename='conversation-messages'
 )
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('login/', LoginView.as_view(), name='login'),
+    path('users/me/', UserProfileView.as_view(), name='user-profile'),
+]
+urlpatterns += router.urls
 urlpatterns += conversations_router.urls

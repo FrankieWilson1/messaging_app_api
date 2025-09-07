@@ -1,130 +1,101 @@
 # Messaging Application API
 
 ## Project Overview
+This project is a backend API for a real-time messaging application, built with Django REST Framework. It provides a secure and scalable foundation for managing users, conversations, and messages. This README.md serves as a high-level overview, while comprehensive, browsable documentation is available at a separate URL.
 
-This project is a backend API for a real-time messaging application, built with Django REST Framework. It provides endpoints for managing users, conversations, and messages. The application is designed to be deployed to a Kubernetes cluster and leverages a **Blue-Green deployment strategy** for seamless, zero-downtime updates.
+## 🚀 Features
+- **User, Conversation, and Message Management**: The API offers a full suite of endpoints for managing core messaging resources.
+- **Django REST Framework**: Built on a solid, well-documented framework to ensure a robust and maintainable codebase.
+- **Secure Authentication**: User authentication is handled using JSON Web Tokens (JWT), providing secure access to protected endpoints.
+- **Comprehensive Documentation**: The entire API is self-documented and accessible via a browsable web interface, making it easy for developers to get started.
 
-## Features
-
-- **User, Conversation, and Message Management**: API endpoints for managing all core resources.
-- **Django REST Framework**: Leverages DRF for efficient API development.
-- **Docker Integration**: The application and its dependencies are containerized for consistent deployment across environments.
-- **Kubernetes Deployment**: All services are managed within a Kubernetes cluster for orchestration and scalability.
-- **Blue-Green Deployment**: A robust strategy is implemented to deploy new application versions with zero downtime.
-
-## Technologies Used
-
+## 🛠️ Technologies Used
 - Python 3.x
 - Django 5.x
 - Django REST Framework 3.x
-- **Docker**
-- **Kubernetes**
-- **Minikube** (for local development)
-- **MySQL** (for the database)
+- MySQL (for the database)
 
-## Setup and Deployment to Kubernetes
+## 📦 Getting Started
 
 ### Prerequisites
+Make sure you have Python 3.x and a MySQL database instance ready.
 
-Before you begin, ensure you have the following installed:
-- **Git**: [Download Git](https://git-scm.com/downloads)
-- **Docker**: Includes Docker Engine and Docker Compose. [Download Docker Desktop](https://www.docker.com/products/docker-desktop)
-- **Minikube**: [Install Minikube](https://minikube.sigs.k8s.io/docs/start/)
-- **kubectl**: [Install kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+### Installation
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/FrankieWilson1/alx-backend-python
+   cd alx-backend-python/messaging_app
+   ```
 
-### 1. Clone the Repository
+2. **Configure Environment Variables**:
+   Create a `.env` file in the `messaging_app` directory to store your database credentials and Django secret key.
+   ```plaintext
+   # .env
+   SECRET_KEY=your_django_secret_key
+   DEBUG=True
+   DB_NAME=your_db_name
+   DB_USER=your_db_user
+   DB_PASSWORD=your_db_password
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   ```
 
-Clone this repository and navigate into the `messaging_app` directory:
+3. **Install Dependencies**:
+   It's highly recommended to use a virtual environment.
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
 
+4. **Run Migrations**:
+   Apply the database migrations to set up your database schema.
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
+
+## 🖥️ Running the Application
+To run the application locally, use the Django development server:
 ```bash
-git clone https://github.com/FrankieWilson1/alx-backend-python
-cd alx-backend-python/messaging_app
+python manage.py runserver
 ```
+The API will be available at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
 
-### 2. Start Minikube
+## 📄 API Documentation
+Full, browsable API documentation is available at the root URL of your running application. This includes detailed information on every endpoint, request bodies, response formats, and status codes.
+- **Full Documentation URL**: [Documentation](https://frankiewilson.pythonanywhere.com/api/v1/)
 
-Start your local Kubernetes cluster with Minikube. This command sets up the environment and enables the ingress addon.
+## 🤝 Contribution
+Contributions are welcome! If you find a bug or want to add a feature, please create a Pull Request with a clear description of the changes.
 
-```bash
-minikube start --driver=docker --addons=ingress
-eval $(minikube docker-env)
-```
+## Endpoints Summary
+This is a quick reference for the main API endpoints. For full details, please refer to the **[Documentation](https://frankiewilson.pythonanywhere.com/api/v1/)**.
 
-### 3. Deploy to Kubernetes
+### Base URL: https://frankiewilson.pythonanywhere.com/api/v1/
 
-The deployment process is automated using the `kubctl-0x02` script. This script builds your Docker image, creates the necessary Kubernetes resources, and deploys both the "blue" (current) and "green" (new) versions of your application.
+### Authentication Endpoints
+| Method | Endpoint          |
+|--------|-------------------|
+| POST   | /register/        |
+| POST   | /token/           |
+| POST   | /token/refresh/   |
 
-First, ensure your secrets are configured. Create a file named `secrets.yaml` and apply it:
+### User Endpoints
+| Method | Endpoint      |
+|--------|---------------|
+| GET    | /users/me/    |
+| PATCH  | /users/me/    |
+| DELETE | /users/me/    |
 
-```yaml
-# secrets.yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: mysql-secrets
-type: Opaque
-stringData:
-  MYSQL_USER: "messaging_app_user"
-  MYSQL_PASSWORD: "some_secure_password"
-  MYSQL_DATABASE: "messaging_app_db"
-```
+### Conversation Endpoints
+| Method | Endpoint          |
+|--------|-------------------|
+| POST   | /conversations/    |
+| GET    | /conversations/    |
 
-Then, apply the secrets:
-
-```bash
-kubectl apply -f secrets.yaml
-```
-
-Next, run the deployment script:
-
-```bash
-chmod +x kubctl-0x02
-./kubctl-0x02
-```
-
-This script will handle the build of the new Docker image and the deployment of all necessary Kubernetes manifests (`blue_deployment.yaml`, `green_deployment.yaml`, `kubeservice.yaml`).
-
-### 4. Switch Traffic (Blue-Green)
-
-After the script confirms the green deployment is healthy, you can switch all user traffic to the new version by changing the selector in `kubeservice.yaml` and applying the update.
-
-```yaml
-# kubeservice.yaml (after update)
-...
-spec:
-  selector:
-    app: messaging-app
-    version: green # Change from 'blue' to 'green'
-...
-```
-
-Apply the updated service configuration:
-
-```bash
-kubectl apply -f kubeservice.yaml
-```
-
-### 5. Access the API
-
-To access the API from your local machine, run the `minikube tunnel` command in a separate terminal window and keep it running.
-
-```bash
-minikube tunnel
-```
-
-Then, you can access the API at `http://localhost/api/v1/`.
-
-## API Endpoints
-
-The API endpoints remain the same:
-
-- Users: `/api/users/`
-- Conversations: `/api/conversations/`
-- Messages: `/api/messages/`
-
-## Testing the API
-
-You can test the API using tools like curl or Postman.
-
-```bash
-curl http://localhost/api/v1/
+### Message Endpoints
+| Method | Endpoint                                  |
+|--------|-------------------------------------------|
+| POST   | /conversations/<uuid:conversation_id>/messages/ |
+| GET    | /conversations/<uuid:conversation_id>/messages/ |
